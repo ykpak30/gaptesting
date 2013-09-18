@@ -40,8 +40,6 @@
  
 var getCurrentPosition = function() {
  
-    var map = document.getElementById('map');
- 
     var success = function(pos) {                
  
         var text = "<div>Latitude: " + pos.coords.latitude + 
@@ -50,29 +48,31 @@ var getCurrentPosition = function() {
  
                     "Accuracy: " + pos.coords.accuracy + "m<br/>" + "</div>";
  
-        document.getElementById('cur_position').innerHTML = text;
+        $("#cur_position").html(text);
  
         console.log(text);
  
-        map.style.display = 'block';
+        
  
-        var mapwidth = 270;  // a mungy compromise between the 2 sizes
+        var mapwidth = parseInt($('#map').css("width"), 10);  // remove 'px' from width value
  
-        var mapheight = 210; // since we can't get w / h dynamically
+        var mapheight = parseInt($('#map').css("height"), 10);
  
-        map.src = "http://maps.googleapis.com/maps/api/staticmap?center=" + 
+        $('#map').css('visibility','visible');
+ 
+        $('#map').attr('src', "http://maps.googleapis.com/maps/api/staticmap?center=" + 
  
             pos.coords.latitude + "," + pos.coords.longitude + 
  
-            "&zoom=14&size=" + mapwidth + "x" + mapheight + "&maptype=roadmap&markers=color:green%7C" +
+            "&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=roadmap&markers=color:green%7C" +
  
-            pos.coords.latitude + "," + pos.coords.longitude + "&sensor=false";
+            pos.coords.latitude + "," + pos.coords.longitude + "&sensor=false");
  
     };
  
     var fail = function(error) {
  
-        document.getElementById('cur_position').innerHTML = "Error getting geolocation: " + error.code;
+        $("#cur_position").html("Error getting geolocation: " + error.code);
  
         console.log("Error getting geolocation: code=" + error.code + " message=" + error.message);
  
@@ -80,9 +80,9 @@ var getCurrentPosition = function() {
  
 
  
-    map.style.display = 'none';
+    $('#map').css('visibility','hidden');
  
-    document.getElementById('cur_position').innerHTML = "Getting geolocation . . .";
+    $("#cur_position").html("Getting geolocation . . .");
  
     console.log("Getting geolocation . . .");
  
@@ -104,21 +104,19 @@ function clearWatch() {
  
         watchID = null;
  
-        document.getElementById('cur_position').innerHTML = "";
+        $("#cur_position").empty();
  
-        document.getElementById('map').style.display = 'none';
+        $('#map').css('visibility','hidden');
  
     }
  
 }
  
-var wsuccess = function(pos) { 
+var wsuccess = function(pos) {                
  
-    var map = document.getElementById('map');
+    $("#cur_position").html("Watching geolocation . . .");
  
-    document.getElementById('cur_position').innerHTML = "Watching geolocation . . .";
- 
-    map.style.display = 'none';
+    $('#map').css('visibility','hidden');
  
     var text = "<div>Latitude: " + pos.coords.latitude + 
  
@@ -126,29 +124,29 @@ var wsuccess = function(pos) {
  
                 "Accuracy: " + pos.coords.accuracy + "m<br/>" + "</div>";
  
-    document.getElementById('cur_position').innerHTML = text;
+    $("#cur_position").html(text);
  
     console.log(text);    
  
-    map.style.display = 'block';
+    var mapwidth = parseInt($('#map').css("width"), 10);  // remove 'px' from width value
  
-    var mapwidth = 270;  // a mungy compromise between the 2 sizes
+    var mapheight = parseInt($('#map').css("height"), 10);
  
-    var mapheight = 210; // since we can't get w / h dynamically
+    $('#map').css('visibility','visible');
  
-    map.src = "http://maps.googleapis.com/maps/api/staticmap?center=" + 
+    $('#map').attr('src', "http://maps.googleapis.com/maps/api/staticmap?center=" + 
  
         pos.coords.latitude + "," + pos.coords.longitude + 
  
         "&zoom=13&size=" + mapwidth + "x" + mapheight + "&maptype=roadmap&markers=color:green%7C" +
  
-        pos.coords.latitude + "," + pos.coords.longitude + "&sensor=false";
+        pos.coords.latitude + "," + pos.coords.longitude + "&sensor=false");
  
 };
  
 var wfail = function(error) {
  
-    document.getElementById('cur_position').innerHTML = "Error getting geolocation: " + error.code;
+    $("#cur_position").html("Error getting geolocation: " + error.code);
  
     console.log("Error getting geolocation: code=" + error.code + " message=" + error.message);
  
@@ -164,9 +162,11 @@ var toggleWatchPosition = function() {
  
     } else {
  
-        document.getElementById('map').style.display = 'none';
+        //$("#cur_position").empty();
  
-        document.getElementById('cur_position').innerHTML = "Watching geolocation . . .";
+        $('#map').css('visibility','hidden');
+ 
+        $("#cur_position").html("Watching geolocation . . .");
  
         console.log("Watching geolocation . . .");
  
